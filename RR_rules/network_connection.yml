@@ -1,0 +1,22 @@
+title: Process Network Connection
+description: Detect inject the code of the Tor client in one of the processes
+tags:
+    - attack.defense_evasion
+    - attack.t1218
+logsource:
+    product: windows
+    category: network_connection
+detection:
+    selection:
+          Image|endswith: 
+            - 'dllhost.exe'
+            - 'regsvr32.exe'
+            - 'rundll32.exe'
+          Initiated: 'true'
+    filter_update_processes:
+        ParentImage: 'C:\Windows\System32\svchost.exe'
+        RemoteAddress|endswith: ':443'
+    condition: selection and not of filter*
+falsepositives:
+    - Communication to other corporate systems that use IP addresses from public address spaces
+level: medium

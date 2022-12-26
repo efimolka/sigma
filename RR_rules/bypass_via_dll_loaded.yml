@@ -1,0 +1,24 @@
+title: DLL Loaded by odbcconf.exe
+description: Detects defence evasion attempt via odbcconf.exe execution to load DLL
+tags:
+    - attack.defense_evasion
+    - attack.t1218
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_1:
+        Image|endswith: '\odbcconf.exe'
+        OriginalFilename: 'odbcconf.exe'
+        CommandLine|contains:
+            - '-a'
+            - '-f'
+            - '/a'
+            - 'regsvr'
+    selection_2:
+        ParentImage|endswith: '\odbcconf.exe'
+        Image|endswith: '\rundll32.exe'
+    condition: 1 of selection_*
+falsepositives:
+    - Legitimate use of odbcconf.exe by legitimate user
+level: medium

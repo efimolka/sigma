@@ -1,0 +1,142 @@
+action: global
+title: Sysmon create file
+description: Detects lnk file
+data: 2022/12/22
+
+---
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_1:
+        Image|endswith: '\odbcconf.exe'
+        OriginalFilename: 'odbcconf.exe'
+        CommandLine|contains:
+            - '-a'
+            - '-f'
+            - '/a'
+            - 'regsvr'
+    selection_2:
+        ParentImage|endswith: '\odbcconf.exe'
+        Image|endswith: '\rundll32.exe'
+    condition: 1 of selection_*
+falsepositives:
+    - Legitimate use of odbcconf.exe by legitimate user
+
+---
+logsource: 
+    product: windows
+    category: process_creation
+detection:
+    selection:
+        ParentImage|endswith: '\DllHost.exe'
+        IntegrityLevel:
+            - 'High'
+            - 'System'
+        ParentCommandLine|contains:
+            - ' /Processid:{3E5FC7F9-9A51-4367-9063-A120244FBEC7}'
+            - ' /Processid:{3E000D72-A845-4CD9-BD83-80C07C3B881F}'
+            - ' /Processid:{BD54C901-076B-434E-B6C7-17C531F4AB41}'
+            - ' /Processid:{D2E7041B-2927-42FB-8E9F-7CE93B6DC937}'
+            - ' /Processid:{E9495B87-D950-4AB5-87A5-FF6D70BF3E90}'
+    condition: selection
+
+---
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith:
+            - '\tor.exe'
+            - '\Tor Browser\Browser\firefox.exe'
+
+---
+logsource:
+    product: windows
+    category: network_connection
+detection:
+    selection:
+          Image|endswith: 
+            - 'dllhost.exe'
+            - 'regsvr32.exe'
+            - 'rundll32.exe'
+          Initiated: 'true'
+    filter_update_processes:
+        ParentImage: 'C:\Windows\System32\svchost.exe'
+        RemoteAddress|endswith: ':443'
+    condition: selection and not of filter*
+falsepositives:
+    - Communication to other corporate systems that use IP addresses from public address spaces
+
+---
+logsource: 
+    product: windows
+    service: sysmon
+detection:
+    selection_1:
+        EventID:
+            - 12
+            - 13
+        TargetObject|contains:
+            - '\Microsoft\Windows\CurrentVersion\Run\'  
+            - '\Microsoft\Windows\CurrentVersion\RunOnceEx\'   
+        Details|contains|all:
+            - 'rundll32'
+            - 'shell32' 
+            - 'ShellExec_RunDLLA'
+            -  'REGSVR' 
+            - '/u'
+            - '/s'
+    selection_2:
+        EventID:
+            - 12
+            - 13
+        TargetObject|contains:
+            - 'Microsoft\Windows NT\CurrentVersion\ICM\Calibration' 
+        Details|contains:
+            - '\Temp\'
+            - '.lnk'
+            #стоит ли добавлять изменение значения на “%SystemRoot%\System32\DCCW.exe?
+    condition: 1 of selection_*
+
+---
+logsource:
+    product: windows
+    category: dns_query
+detection:
+    selection:
+        QueryName|contains: 
+          - '.onion'
+          - 'sejnfjrq6szgca7v'
+          - 'zdfsyv3rubuhpql3'
+          - 'ihdhoeoovbtgutfm'
+          - 'tapeucwutvne7l5o'
+          - '2qlvvvnhqyda2ahd'
+          - 'answerstedhctbek'
+          - '5j7saze5byfqccf3'
+          - 'cmgvqnxjoiqthvrc'
+          - '3bbaaaccczcbdddz'
+          - 'sgvtcaew4bxjd7ln'
+          - 'ugw3zjsayleoamaz'
+          - 'ynvs3km32u33agwq'
+          - 'njalladnspotetti'
+          - 'psychonaut3z5aoz'
+          - 'habaivdfcyamjhkk'
+          - 'torwikignoueupfm'
+          - 'bitmailendavkbec'
+          - 'cyphdbyhiddenbhs'
+          - 'clgs64523yi2bkhz'
+          - '76qugh5bey5gum7l'
+          - 'hd37oiauf5uoz7gg'
+          - 'expressobutiolem'
+          - 'gl3n4wtekbfaubye'
+          - 'archivecaslytosk'
+          - 'kyk55bof3hzdiwrm'
+          - 'qqvyib4j3fz66nuc'
+          - 'bcwpy5wca456u7tz'
+          - 'pornhubthbh7ap3u'
+          - 'fncuwbiisyh6ak3i'
+    condition: selection
+falsepositives:
+    - Unknown

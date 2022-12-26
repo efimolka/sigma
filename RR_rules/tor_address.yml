@@ -1,0 +1,45 @@
+title: Tor Onion Address
+description: Detects resolution of an .onion address related to Tor routing networks
+tags:
+    - attack.command_and_control
+    - attack.t1090
+logsource:
+    product: windows
+    category: dns_query
+detection:
+    selection:
+        QueryName|contains: 
+          - '.onion'
+          - 'sejnfjrq6szgca7v'
+          - 'zdfsyv3rubuhpql3'
+          - 'ihdhoeoovbtgutfm'
+          - 'tapeucwutvne7l5o'
+          - '2qlvvvnhqyda2ahd'
+          - 'answerstedhctbek'
+          - '5j7saze5byfqccf3'
+          - 'cmgvqnxjoiqthvrc'
+          - '3bbaaaccczcbdddz'
+          - 'sgvtcaew4bxjd7ln'
+          - 'ugw3zjsayleoamaz'
+          - 'ynvs3km32u33agwq'
+          - 'njalladnspotetti'
+          - 'psychonaut3z5aoz'
+          - 'habaivdfcyamjhkk'
+          - 'torwikignoueupfm'
+          - 'bitmailendavkbec'
+          - 'cyphdbyhiddenbhs'
+          - 'clgs64523yi2bkhz'
+          - '76qugh5bey5gum7l'
+          - 'hd37oiauf5uoz7gg'
+          - 'expressobutiolem'
+          - 'gl3n4wtekbfaubye'
+          - 'archivecaslytosk'
+          - 'kyk55bof3hzdiwrm'
+          - 'qqvyib4j3fz66nuc'
+          - 'bcwpy5wca456u7tz'
+          - 'pornhubthbh7ap3u'
+          - 'fncuwbiisyh6ak3i'
+    condition: selection
+falsepositives:
+    - Unknown
+level: high

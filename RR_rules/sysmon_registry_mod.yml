@@ -1,0 +1,36 @@
+title: Sysmon regitry modification event 
+description: Set registry entry to enable its automatic execution
+tags:
+    - attack.execution
+    - attack.persistence
+logsource: 
+    product: windows
+    service: sysmon
+detection:
+    selection_1:
+        EventID:
+            - 12
+            - 13
+        TargetObject|contains:
+            - '\Microsoft\Windows\CurrentVersion\Run\'  
+            - '\Microsoft\Windows\CurrentVersion\RunOnceEx\'   
+        Details|contains|all:
+            - 'rundll32'
+            - 'shell32' 
+            - 'ShellExec_RunDLLA'
+            -  'REGSVR' 
+            - '/u'
+            - '/s'
+    selection_2:
+        EventID:
+            - 12
+            - 13
+        TargetObject|contains:
+            - 'Microsoft\Windows NT\CurrentVersion\ICM\Calibration' 
+        Details|contains:
+            - '\Temp\'
+            - '.lnk'
+            #стоит ли добавлять изменение значения на “%SystemRoot%\System32\DCCW.exe?
+    condition: 1 of selection_*
+level: high
+
