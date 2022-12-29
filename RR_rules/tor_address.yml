@@ -9,7 +9,6 @@ logsource:
 detection:
     selection:
         QueryName|contains: 
-          - '.onion'
           - 'sejnfjrq6szgca7v'
           - 'zdfsyv3rubuhpql3'
           - 'ihdhoeoovbtgutfm'
