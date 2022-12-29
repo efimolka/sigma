@@ -1,0 +1,15 @@
+title: Bypass UAC via Fodhelper.exe
+description: Identifies use of Fodhelper.exe to bypass User Account Control. Adversaries use this technique to execute privileged processes.
+references:
+    - https://redcanary.com/blog/raspberry-robin/
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection:
+        ParentImage|endswith: '\fodhelper.exe'
+    condition: selection
+level: high
+
+# в системе:
+# Header.Type: "1" AND Payload.ParentImageFileName: "*\\fodhelper.exe" AND 

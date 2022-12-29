@@ -1,0 +1,33 @@
+title: Downloading malware 
+description: Using msiexec or wmic to download from the URL. 
+references:
+    - https://redcanary.com/blog/raspberry-robin/
+tags:
+    - attack.defense_evasion
+    - attack.command_and_control
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_msi:
+        Image|endswith: '\msiexec.exe'
+    selection_wmic:
+        Image|endswith: '\wmic.exe'
+    selection_c1:
+        CommandLine|contains:
+            - 'http://'
+            - 'https://'
+    selection_c2:
+        CommandLine|contains:
+            - '/q'
+            - '-q'
+    condition: (selection_msi and selection_c*) or (selection_wmic and selection_c1)
+level: high
+
+# в системе:
+# Payload.ImageFileName: "*\\msiexec.exe" AND 
+# (Payload.CommandLine:"*http[:]//*" OR Payload.CommandLine:"*http[:]//*") 
+# AND (Payload.CommandLine:"* /q *" OR Payload.CommandLine:"* -q *")
+
+# Payload.ImageFileName: "*\\wmic.exe" AND 
+# (Payload.CommandLine:"*http[:]//*" OR Payload.CommandLine:"*http[:]//*") 
