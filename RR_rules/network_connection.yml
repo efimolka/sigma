@@ -13,10 +13,14 @@ detection:
             - 'regsvr32.exe'
             - 'rundll32.exe'
           Initiated: 'true'
-    filter_update_processes:
-        ParentImage: 'C:\Windows\System32\svchost.exe'
-        RemoteAddress|endswith: ':443'
-    condition: selection and not of filter*
+          CommandLine:
+            - ""
+    condition: selection 
 falsepositives:
     - Communication to other corporate systems that use IP addresses from public address spaces
 level: medium
+
+# в системе
+# Header.Type:"25" AND 
+# (Payload.ParentImageFileName:"*\\rundll32.exe" OR Payload.ParentImageFileName:"*\\dllhost.exe" OR Payload.ParentImageFileName:"*\\regsrv32.exe")
+# AND Payload.CommandLine:"" 
