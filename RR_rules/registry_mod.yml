@@ -24,7 +24,6 @@ detection:
     condition: 1 of selection_*
 level: high
 
-# в системе
 # Header.Type:"30"
 # AND ((Payload.KeyName:"*\\Microsoft\\Windows\\CurrentVersion\\Run*" OR Payload.KeyName: "*\\Microsoft\\Windows\\CurrentVersion\\RunOnceEx*")
 # AND (Payload.DataString:"*ShellExec_RunDLLA*" OR Payload.DataString:"*shell32*" OR Payload.DataString:"*REGSVR*"))
