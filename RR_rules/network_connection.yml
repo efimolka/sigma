@@ -20,7 +20,6 @@ falsepositives:
     - Communication to other corporate systems that use IP addresses from public address spaces
 level: medium
 
-# в системе
 # Header.Type:"25" AND 
 # (Payload.ParentImageFileName:"*\\rundll32.exe" OR Payload.ParentImageFileName:"*\\dllhost.exe" OR Payload.ParentImageFileName:"*\\regsrv32.exe")
 # AND Payload.CommandLine:"" 
