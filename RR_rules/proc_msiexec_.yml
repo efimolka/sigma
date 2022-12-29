@@ -24,7 +24,6 @@ detection:
     condition: (selection_msi and selection_c*) or (selection_wmic and selection_c1)
 level: high
 
-# в системе:
 # Payload.ImageFileName: "*\\msiexec.exe" AND 
 # (Payload.CommandLine:"*http[:]//*" OR Payload.CommandLine:"*http[:]//*") 
 # AND (Payload.CommandLine:"* /q *" OR Payload.CommandLine:"* -q *")
