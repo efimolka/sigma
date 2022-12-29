@@ -5,32 +5,28 @@ tags:
     - attack.persistence
 logsource: 
     product: windows
-    service: sysmon
+    category: registry_set
 detection:
     selection_1:
-        EventID:
-            - 12
-            - 13
         TargetObject|contains:
             - '\Microsoft\Windows\CurrentVersion\Run\'  
             - '\Microsoft\Windows\CurrentVersion\RunOnceEx\'   
         Details|contains|all:
-            - 'rundll32'
-            - 'shell32' 
+            - 'shell32'
             - 'ShellExec_RunDLLA'
-            -  'REGSVR' 
-            - '/u'
-            - '/s'
+            - '*REGSVR*'
     selection_2:
-        EventID:
-            - 12
-            - 13
         TargetObject|contains:
             - 'Microsoft\Windows NT\CurrentVersion\ICM\Calibration' 
         Details|contains:
             - '\Temp\'
             - '.lnk'
-            #стоит ли добавлять изменение значения на “%SystemRoot%\System32\DCCW.exe?
     condition: 1 of selection_*
 level: high
 
+# в системе
+# Header.Type:"30"
+# AND ((Payload.KeyName:"*\\Microsoft\\Windows\\CurrentVersion\\Run*" OR Payload.KeyName: "*\\Microsoft\\Windows\\CurrentVersion\\RunOnceEx*")
+# AND (Payload.DataString:"*ShellExec_RunDLLA*" OR Payload.DataString:"*shell32*" OR Payload.DataString:"*REGSVR*"))
+# OR (Payload.KeyName:"*\\Microsoft\\Windows NT\\CurrentVersion\\ICM\\Calibration*" AND 
+# (Payload.DataString:"*\\Temp\\*" OR Payload.DataString:"*.lnk *")
