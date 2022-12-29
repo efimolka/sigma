@@ -14,6 +14,7 @@ detection:
             - '-a'
             - '-f'
             - '/a'
+            - '/f'
             - 'regsvr'
     selection_2:
         ParentImage|endswith: '\odbcconf.exe'
@@ -22,3 +23,8 @@ detection:
 falsepositives:
     - Legitimate use of odbcconf.exe by legitimate user
 level: medium
+
+# в системе
+# event_type: "Process creation" AND Payload.ImageFileName: "*\\odbcconf.exe" AND 
+# (Payload.CommandLine:"* -a *" OR Payload.CommandLine:"* -f *" 
+# OR Payload.CommandLine:"* /a *" OR Payload.CommandLine:"* /f *" OR Payload.CommandLine:"* regsrv *")
